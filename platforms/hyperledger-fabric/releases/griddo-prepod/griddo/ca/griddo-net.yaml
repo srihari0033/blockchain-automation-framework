@@ -1,0 +1,44 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: griddo-net-ca
+  namespace: griddo-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: griddo-net-ca
+  chart:
+    git: git@github.com:srihari0033/blockchain-automation-framework.git
+    ref: griddo-prepod
+    path: platforms/hyperledger-fabric/charts/ca    
+  values:
+    metadata:
+      namespace: griddo-net
+      images:
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+        ca: hyperledger/fabric-ca:1.4.8
+    server:
+      name: ca
+      tlsstatus: true
+      admin: griddo-admin
+    storage:
+      storageclassname: griddosc
+      storagesize: 512Mi 
+    vault:
+      role: vault-role
+      address: http://a1b61ba0e1f264fd995dcbfa4adefca6-2139640007.ca-central-1.elb.amazonaws.com:8200
+      authpath: test1griddo-net-auth
+      secretcert: secret/crypto/ordererOrganizations/griddo-net/ca?ca.griddo-net-cert.pem
+      secretkey: secret/crypto/ordererOrganizations/griddo-net/ca?griddo-net-CA.key
+      secretadminpass: secret/credentials/griddo-net/ca/griddo?user
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+    service:
+      servicetype: ClusterIP
+      ports:
+        tcp:
+          port: 7054
+    proxy:
+      provider: haproxy
+      type: orderer
+      external_url_suffix: blockchain.griddo.co
