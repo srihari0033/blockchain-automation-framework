@@ -1,0 +1,45 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: superadmin-net-ca
+  namespace: superadmin-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: superadmin-net-ca
+  chart:
+    git: git@github.com:srihari0033/blockchain-automation-framework.git
+    ref: griddo-prepod
+    path: platforms/hyperledger-fabric/charts/ca    
+  values:
+    metadata:
+      namespace: superadmin-net
+      images:
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+        ca: hyperledger/fabric-ca:1.4.8
+       
+    server:
+      name: ca
+      tlsstatus: true
+      admin: superadmin-admin
+    storage:
+      storageclassname: superadminsc
+      storagesize: 512Mi
+    vault:
+      role: vault-role
+      address: http://a1b61ba0e1f264fd995dcbfa4adefca6-2139640007.ca-central-1.elb.amazonaws.com:8200
+      authpath: test1superadmin-net-auth
+      secretcert: secret/crypto/peerOrganizations/superadmin-net/ca?ca.superadmin-net-cert.pem
+      secretkey: secret/crypto/peerOrganizations/superadmin-net/ca?superadmin-net-CA.key
+      secretadminpass: secret/credentials/superadmin-net/ca/superadmin?user
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+    service:
+      servicetype: ClusterIP
+      ports:
+        tcp:
+          port: 7054
+    proxy:
+      provider: haproxy
+      type: peer
+      external_url_suffix: blockchain.griddo.co
