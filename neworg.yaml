@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    fluxcd.io/sync-checksum: 2ccbcd4f32f1bd6664c79f3281e6a5fe9ad0381e
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"rbac.authorization.k8s.io/v1beta1","kind":"ClusterRoleBinding","metadata":{"annotations":{"fluxcd.io/sync-checksum":"2ccbcd4f32f1bd6664c79f3281e6a5fe9ad0381e"},"labels":{"fluxcd.io/sync-gc-mark":"sha256.XA-2m64dwBYUzObbpA7abrpzie_2UBnKZUVEq5_tucY"},"name":"neworg-net-role-tokenreview-binding"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"system:auth-delegator"},"subjects":[{"kind":"ServiceAccount","name":"vault-reviewer","namespace":"neworg-net"}]}
+  creationTimestamp: "2022-05-13T12:58:16Z"
+  labels:
+    fluxcd.io/sync-gc-mark: sha256.XA-2m64dwBYUzObbpA7abrpzie_2UBnKZUVEq5_tucY
+  name: neworg-net-role-tokenreview-binding
+  resourceVersion: "1691629"
+  uid: 47670cdc-1b62-4d6c-ac5e-9c8c663a54ce
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+- kind: ServiceAccount
+  name: vault-reviewer
+  namespace: neworg-net
